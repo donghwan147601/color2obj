@@ -1,8 +1,38 @@
-Here is the refined README.md in English, structured for maximum clarity and professionalism.📦 my_cpp_pkgmy_cpp_pkg is a modular ROS 2 package designed for color-based object identification and ID assignment. It utilizes a two-node architecture to process visual data and map extracted color features to specific object labels.🚀 Overview1. image_processing NodeProcesses incoming raw images and extracts representative color features.Input Topic: /camera/rgb_masked (sensor_msgs/msg/Image)Output Topics:/dcamera/processed_image (sensor_msgs/msg/Image)/camera/object_hsv (std_msgs/msg/Int32MultiArray)Key Features:Resizes images to 640x480 and applies Gaussian blur for noise reduction.Normalizes lighting using CLAHE in the LAB color space.Computes average HSV/RGB values based on a grayscale mask.Optional real-time preview via OpenCV GUI.2. object_mapping_node NodeMaps the extracted color features to predefined object labels.Input Topic: /camera/object_hsv (std_msgs/msg/Int32MultiArray)Output Topic: /camera/object_label (std_msgs/msg/String)Key Features:Loads object color registry from resource/object_table.yaml.Identifies the closest object label based on color similarity (HSV/RGB).🛠 UsageBuild the package:Bashcolcon build --packages-select my_cpp_pkg
-Source the workspace:Bashsource install/setup.bash
-Run the nodes:Bash   # Run the image processing node
-   ros2 run my_cpp_pkg image_processing
+# 📦 my_cpp_pkg
 
-   # Run the object mapping node
-   ros2 run my_cpp_pkg object_mapping_node
-📋 Topics SummaryTopicTypeDirectionDescription/camera/rgb_maskedImageSubInput masked RGB image/dcamera/processed_imageImagePubProcessed output visualization/camera/object_hsvInt32MultiArrayPubExtracted average HSV/RGB data/camera/object_labelStringPubFinal matched object label⚙️ Parametersshow_gui (bool, default: true)Toggles the OpenCV preview window for debugging and visualization.💡 NotesColor Matching: The matching logic relies on the thresholds/values defined in resource/object_table.yaml.Extensibility: This architecture is designed for easy expansion, including the addition of new object labels, advanced preprocessing filters, or integration with machine learning-based classification models.Developed by Donghwan
+`my_cpp_pkg` is a modular ROS 2 package designed for color-based object identification and ID assignment. It utilizes a two-node architecture to process visual data and map extracted color features to specific object labels.
+
+---
+
+## 🚀 Nodes Overview
+
+### 1. `image_processing`
+Processes incoming raw images and extracts representative color features.
+
+*   **Input:** `/camera/rgb_masked` (`sensor_msgs/msg/Image`)
+*   **Output:** 
+    *   `/dcamera/processed_image` (`sensor_msgs/msg/Image`)
+    *   `/camera/object_hsv` (`std_msgs/msg/Int32MultiArray`)
+*   **Key Features:**
+    *   **Resizing:** 640x480 resolution.
+    *   **Noise Reduction:** Applied Gaussian blur.
+    *   **Lighting Normalization:** CLAHE applied in the LAB color space.
+    *   **Feature Extraction:** Computes average HSV/RGB values via grayscale mask.
+    *   **Visualization:** Optional real-time preview via OpenCV GUI.
+
+### 2. `object_mapping_node`
+Maps the extracted color features to predefined object labels.
+
+*   **Input:** `/camera/object_hsv` (`std_msgs/msg/Int32MultiArray`)
+*   **Output:** `/camera/object_label` (`std_msgs/msg/String`)
+*   **Key Features:**
+    *   **Registry:** Loads color definitions from `resource/object_table.yaml`.
+    *   **Matching:** Identifies the closest label based on HSV/RGB similarity.
+
+---
+
+## 🛠 Getting Started
+
+### Build
+```bash
+colcon build --packages-select my_cpp_pkg
