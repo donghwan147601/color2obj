@@ -4,7 +4,6 @@ from launch.actions import ExecuteProcess
 import os
 
 def generate_launch_description():
-    # 환경 변수 정리: Snap 경로 제거
     shell_env = 'export LD_LIBRARY_PATH=$(echo $LD_LIBRARY_PATH | tr ":" "\\n" | grep -v snap | tr "\\n" ":"); ' \
                 'export PATH=$(echo $PATH | tr ":" "\\n" | grep -v snap | tr "\\n" ":"); '
 
