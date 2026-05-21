@@ -12,14 +12,11 @@ void ObjectRegistry::registerObject(const ObjectSpec& obj) {
 
 void ObjectRegistry::loadFromYaml(const std::string& pkg_name, const std::string& file_path) {
     try {
-        // 1. 패키지 경로 탐색
         std::string share_dir = ament_index_cpp::get_package_share_directory(pkg_name);
         std::string full_path = share_dir + "/" + file_path;
-        
-        // 2. YAML 파일 로드
+
         YAML::Node config = YAML::LoadFile(full_path);
-        
-        // 3. object_database 리스트 순회 및 등록
+
         for (const auto& item : config["object_database"]) {
             ObjectSpec obj;
             obj.id = item["id"].as<std::string>();
@@ -30,7 +27,6 @@ void ObjectRegistry::loadFromYaml(const std::string& pkg_name, const std::string
             obj.g_mean = item["g"].as<int>();
             obj.b_mean = item["b"].as<int>();
             
-            // 기존 registerObject 함수 재사용
             this->registerObject(obj);
         }
     } catch (const std::exception& e) {
@@ -43,16 +39,15 @@ std::string ObjectRegistry::findBestMatch(int h, int s, int v, int r, int g, int
     double min_dist = std::numeric_limits<double>::max();
 
     for (const auto& obj : db) {
-        // HSV 거리 계산
         int dh = std::abs(h - obj.h_mean);
         if (dh > 90) {
-            dh = 180 - dh; // H는 0~180 범위에서 원형이므로 보정
+            dh = 180 - dh;
         }
 
         double hsv_dist = std::pow(dh, 2) * 2.0 +
                           std::pow(s - obj.s_mean, 2) * 1.0 +  std::pow(v - obj.v_mean, 2) * 0.5;
 
-        // RGB 거리 계산
+   
         double dr = static_cast<double>(r - obj.r_mean);
         double dg = static_cast<double>(g - obj.g_mean);
         double dbv = static_cast<double>(b - obj.b_mean);
