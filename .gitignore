@@ -1,0 +1,13 @@
+# 빌드 및 ROS 관련 생성 폴더 제외
+build/
+install/
+log/
+
+# IDE 설정 파일
+.vscode/
+.idea/
+
+# 시스템 및 기타 잡동사니
+.DS_Store
+*.pyc
+__pycache__/
